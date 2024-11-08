@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridSpawn : MonoBehaviour
 {
-     [Header("Grid Settings")]
+    [Header("Grid Settings")]
     [SerializeField] private GameObject prefabToSpawn;
     [SerializeField] private int rows = 5;
     [SerializeField] private int columns = 5;
@@ -15,6 +15,9 @@ public class GridSpawn : MonoBehaviour
     [SerializeField] private bool spawnOnStart = true;
     [SerializeField] private Transform parent;
 
+    [SerializeField] private List<Cell> cellPositions = new List<Cell>();
+    [SerializeField] public  List<Cell> emptyCells = new List<Cell>();
+
     private void Start()
     {
         if (spawnOnStart)
@@ -23,7 +26,7 @@ public class GridSpawn : MonoBehaviour
         }
     }
 
-    public void SpawnGrid()
+   public void SpawnGrid()
     {
         if (prefabToSpawn == null)
         {
@@ -58,15 +61,24 @@ public class GridSpawn : MonoBehaviour
                 );
 
                 GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
-                
+                spawnedObject.name = "( " + col + " , " + row +" )";
+
                 // Set parent if specified
                 if (parent != null)
                     spawnedObject.transform.SetParent(parent);
                 else
                     spawnedObject.transform.SetParent(transform);
 
-                // Name the object for easy identification
-                spawnedObject.name = $"GridObject_{row}_{col}";
+                Cell cell = spawnedObject.GetComponent<Cell>();
+                cellPositions.Add(cell);
+
+                // Check if the cell is empty and add to emptyCells list
+                
+                if (cell != null && !cell.fruitInside)
+                {
+                    emptyCells.Add(cell);
+                    cell.OnFruitStatusChanged += UpdateEmptyCells;
+                }
             }
         }
     }
@@ -79,7 +91,35 @@ public class GridSpawn : MonoBehaviour
         {
             DestroyImmediate(parentTransform.GetChild(0).gameObject);
         }
+
+        // Clear lists
+        cellPositions.Clear();
+        emptyCells.Clear();
     }
+
+      // Method to update emptyCells list
+    private void UpdateEmptyCells(Cell cell,bool isEmpty)
+    {
+        
+        if (isEmpty && !emptyCells.Contains(cell))
+        {
+            emptyCells.Add(cell);
+            Debug.Log(cell);
+
+        }
+        else if (!isEmpty && emptyCells.Contains(cell))
+        {
+            emptyCells.Remove(cell);
+        }
+    }
+
+
+
+
+
+
+
+
 
     // Helper method to update grid at runtime
     public void UpdateGridSettings(int newRows, int newColumns, float newSpacing)
