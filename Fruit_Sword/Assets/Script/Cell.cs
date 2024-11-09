@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-   public bool fruitInside;
+    public bool fruitInside;
+    public FruitType fruitType = FruitType.none ;
     public delegate void FruitStatusChanged(Cell cell, bool isEmpty);
     public event FruitStatusChanged OnFruitStatusChanged;
 
@@ -29,6 +30,11 @@ public class Cell : MonoBehaviour
     {
         if (isObjectInside)
         {
+            if(currentFruit != null)
+            {
+                fruitType = currentFruit.GetComponent<Fruit>().type;
+            }
+            
             timeInsideCell += Time.deltaTime;
             if (timeInsideCell >= MINIMUM_TIME && !fruitInside)
             {
@@ -37,6 +43,7 @@ public class Cell : MonoBehaviour
         }
         else
         {
+            fruitType = FruitType.none;
             SetFruitInside(false);
         }
 
@@ -46,7 +53,6 @@ public class Cell : MonoBehaviour
             isObjectInside = false;
             currentFruit = null;
             stayTimer = 0;
-            Debug.Log("Fruit became inactive");
         }
     }
 
@@ -65,7 +71,11 @@ public class Cell : MonoBehaviour
         {
             // Reset timer khi có fruit mới vào
             stayTimer = 0;
-            currentFruit = other.gameObject;
+            if(currentFruit == null)
+            {
+                currentFruit = other.gameObject;
+            }
+            
         }
     }
 
@@ -77,7 +87,7 @@ public class Cell : MonoBehaviour
             isObjectInside = false;
             currentFruit = null;
             stayTimer = 0;
-            Debug.Log("UnActive");
+           
             return;
         }
 
@@ -92,6 +102,13 @@ public class Cell : MonoBehaviour
                     isObjectInside = true;
                 }
             }
+        }
+    }
+    public void RemoveFruit()
+    {
+        if (currentFruit != null)
+        {
+            currentFruit.SetActive(false);
         }
     }
 

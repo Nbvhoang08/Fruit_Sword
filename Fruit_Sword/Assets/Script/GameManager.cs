@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GridSpawn gridSpawn;
     private int randomIndex;
+    private MatchChecker checker;
 
 
 
@@ -35,9 +36,36 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ActivateRandomFruitAtFixedPosition();
+        if(checker == null)
+        {
+            checker =GetComponent<MatchChecker>();
+        }
     }
-    public void Update(){
-
+    public void Update()
+    {
+        // Kiểm tra tất cả các trái cây trong danh sách activeFruits 
+        for (int i = activeFruits.Count - 1; i >= 0; i--) 
+        { 
+            GameObject fruit = activeFruits[i]; 
+            if (!fruit.activeSelf) 
+            { 
+                // Xóa khỏi danh sách activeFruits 
+                activeFruits.RemoveAt(i); 
+                // Thêm vào danh sách inactiveFruits 
+                if (!inactiveFruits.Contains(fruit)) 
+                {  
+                    inactiveFruits.Add(fruit); 
+                }
+            } 
+        } 
+        // Đảm bảo tất cả các trái cây không hoạt động trong allFruits có trong inactiveFruits 
+        foreach (var fruit in allFruits) 
+        { 
+            if (!fruit.activeSelf && !inactiveFruits.Contains(fruit)) 
+            { 
+                inactiveFruits.Add(fruit); 
+            }
+        }
     }
 
     private void InitializeFruits()
@@ -49,14 +77,17 @@ public class GameManager : MonoBehaviour
             {
                 GameObject fruit = Instantiate(fruitInfo.prefab);
                 fruit.SetActive(false);
-               
+                fruit.name = fruit.name + " " + i;
                 // Add to management lists
                 allFruits.Add(fruit);
                 inactiveFruits.Add(fruit);
             }
         }
     }
-    
+    public void CheckCell()
+    {   
+        checker.CheckMatchAfterPlacement();
+    }    
 
     // Active ở vị trí cố định
     public GameObject ActivateRandomFruitAtFixedPosition()
@@ -93,7 +124,7 @@ public class GameManager : MonoBehaviour
 
         // Get random fruit from inactive list
         int rdIndex =  Random.Range(0,inactiveFruits.Count);
-        Debug.Log("" + rdIndex + " " + randomIndex);
+        //Debug.Log("" + rdIndex + " " + randomIndex);
         GameObject selectedFruit = inactiveFruits[rdIndex];
         selectedFruit.GetComponent<Fruit>().Actived = false;
         // Calculate random position
@@ -108,7 +139,7 @@ public class GameManager : MonoBehaviour
         inactiveFruits.RemoveAt(rdIndex);
         
         activeFruits.Add(selectedFruit);
-
+        CheckCell();
     }
 
     // Deactivate a fruit

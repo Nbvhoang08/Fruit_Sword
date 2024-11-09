@@ -103,6 +103,7 @@ MonoBehaviour:
   canMove: 0
   targetPos: {x: 0, y: 0}
   Actived: 0
+  type: 2
   speed: 10
   gameManager: {fileID: 0}
 --- !u!58 &-7792170598160340835

@@ -6,8 +6,8 @@ public class GridSpawn : MonoBehaviour
 {
     [Header("Grid Settings")]
     [SerializeField] private GameObject prefabToSpawn;
-    [SerializeField] private int rows = 5;
-    [SerializeField] private int columns = 5;
+     public int rows = 5;
+    public int columns = 5;
     [SerializeField] private float spacing = 1f;
     [SerializeField] private bool centerGrid = true;
 
@@ -15,8 +15,8 @@ public class GridSpawn : MonoBehaviour
     [SerializeField] private bool spawnOnStart = true;
     [SerializeField] private Transform parent;
 
-    [SerializeField] private List<Cell> cellPositions = new List<Cell>();
-    [SerializeField] public  List<Cell> emptyCells = new List<Cell>();
+    public List<Cell> cellPositions = new List<Cell>();
+    public  List<Cell> emptyCells = new List<Cell>();
 
     private void Start()
     {
@@ -104,7 +104,7 @@ public class GridSpawn : MonoBehaviour
         if (isEmpty && !emptyCells.Contains(cell))
         {
             emptyCells.Add(cell);
-            Debug.Log(cell);
+           
 
         }
         else if (!isEmpty && emptyCells.Contains(cell))

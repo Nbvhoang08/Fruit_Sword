@@ -10,6 +10,7 @@ public class Fruit : MonoBehaviour
     public bool canMove;
     public Vector2 targetPos;
     public bool Actived;
+    public FruitType type ;
     [SerializeField] private float speed ;
     [SerializeField] public GameManager gameManager;
     void Awake()
@@ -85,6 +86,7 @@ public class Fruit : MonoBehaviour
     IEnumerator RadomFruit(){
         yield return new WaitForSeconds(0.2f);
         gameManager.ActivateRandomFruitAtRandomPosition();
+        //gameManager.CheckCell();
         
     }
 

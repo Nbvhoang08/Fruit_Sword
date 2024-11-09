@@ -479,6 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1374761718}
   - component: {fileID: 1374761719}
+  - component: {fileID: 1374761720}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -515,23 +516,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fruitPrefabs:
   - prefab: {fileID: 1722952508958697179, guid: 8793b6ad9333c4716ad58f508da63493, type: 3}
-    amount: 20
+    amount: 0
   - prefab: {fileID: 4886207239755125974, guid: b13c6d95f398f496aa0fdfa60ec1c130, type: 3}
-    amount: 20
+    amount: 0
   - prefab: {fileID: 2381070475331711111, guid: 1c454949072ef44db847d52710fb127b, type: 3}
-    amount: 20
+    amount: 0
   - prefab: {fileID: 5440102789157454213, guid: 640bc34d42584403fb32f06844c7a649, type: 3}
-    amount: 20
+    amount: 0
   - prefab: {fileID: 7460337723986308853, guid: 588fdd973ff3b47c9a19cad99a9cc422, type: 3}
     amount: 20
   - prefab: {fileID: 1966431941432421129, guid: 3d927a4c6ca8e4c59a6cef41dfb92404, type: 3}
-    amount: 20
+    amount: 0
   fixedSpawnPosition: {fileID: 0}
   randomSpawnAreaMin: {x: 0, y: 0, z: 0}
   randomSpawnAreaMax: {x: 0, y: 0, z: 0}
   inactiveFruits: []
   activeFruits: []
   gridSpawn: {fileID: 677913984}
+--- !u!114 &1374761720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374761717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96faf1a686c841e18cdd1e3790c432a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridSpawn: {fileID: 677913984}
+  swordPrefab: {fileID: 245735445107728028, guid: 7d25cd4e6083542f4af449457af4da95, type: 3}
+  offsetX: 12
+  offsetY: 12
+  centerGrid: {fileID: 677913985}
 --- !u!1 &1660545477
 GameObject:
   m_ObjectHideFlags: 0
