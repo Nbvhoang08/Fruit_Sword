@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SwordE : MonoBehaviour
 {
-    public float speed = 5f; 
+    public float speed = 5f;
+    public GameManager gameManager; 
     public void MoveSword(Vector3 startPosition, Vector3 endPosition) 
     { 
         StartCoroutine(MoveSwordRoutine(startPosition, endPosition)); 
@@ -13,6 +14,7 @@ public class SwordE : MonoBehaviour
     { 
         float elapsedTime = 0f; 
         float totalDistance = Vector3.Distance(startPosition, endPosition); 
+        SoundManager.Instance.PlayVFXSound(0);
         while (elapsedTime < totalDistance / speed) 
         { 
             transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime * speed) / totalDistance); 
@@ -23,5 +25,13 @@ public class SwordE : MonoBehaviour
         transform.position = endPosition; 
         // Bạn có thể thêm hiệu ứng phá hủy hoặc ẩn thanh kiếm sau khi nó di chuyển xong 
         Destroy(gameObject); 
-        }
+    }
+    public void TakeScore(int score)
+    {
+        gameManager.score += score;
+    }
+
+
+
+
 }

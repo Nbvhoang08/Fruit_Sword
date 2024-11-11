@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 145108073}
   - component: {fileID: 145108072}
   - component: {fileID: 145108071}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,6 +372,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &997721916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1199206081996945159, guid: 498b957b06a404b7fb0fa47e140c19c4, type: 3}
+  m_PrefabInstance: {fileID: 1198886289}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1198886289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -464,6 +475,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7705085284293118319, guid: 498b957b06a404b7fb0fa47e140c19c4, type: 3}
+      propertyPath: ScoreText
+      value: 
+      objectReference: {fileID: 997721916}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -516,23 +531,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fruitPrefabs:
   - prefab: {fileID: 1722952508958697179, guid: 8793b6ad9333c4716ad58f508da63493, type: 3}
-    amount: 0
+    amount: 20
   - prefab: {fileID: 4886207239755125974, guid: b13c6d95f398f496aa0fdfa60ec1c130, type: 3}
-    amount: 0
+    amount: 20
   - prefab: {fileID: 2381070475331711111, guid: 1c454949072ef44db847d52710fb127b, type: 3}
-    amount: 0
+    amount: 20
   - prefab: {fileID: 5440102789157454213, guid: 640bc34d42584403fb32f06844c7a649, type: 3}
-    amount: 0
+    amount: 20
   - prefab: {fileID: 7460337723986308853, guid: 588fdd973ff3b47c9a19cad99a9cc422, type: 3}
     amount: 20
   - prefab: {fileID: 1966431941432421129, guid: 3d927a4c6ca8e4c59a6cef41dfb92404, type: 3}
-    amount: 0
+    amount: 20
   fixedSpawnPosition: {fileID: 0}
   randomSpawnAreaMin: {x: 0, y: 0, z: 0}
   randomSpawnAreaMax: {x: 0, y: 0, z: 0}
   inactiveFruits: []
   activeFruits: []
   gridSpawn: {fileID: 677913984}
+  score: 0
 --- !u!114 &1374761720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +566,7 @@ MonoBehaviour:
   offsetX: 12
   offsetY: 12
   centerGrid: {fileID: 677913985}
+  Slash: 1
 --- !u!1 &1660545477
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,7 +647,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: -134
+  m_SortingOrder: -100
   m_TargetDisplay: 0
 --- !u!224 &1660545481
 RectTransform:
@@ -790,7 +807,7 @@ Camera:
   far clip plane: 1000
   field of view: 72.71517
   orthographic: 1
-  orthographic size: 10.347947
+  orthographic size: 10.353
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

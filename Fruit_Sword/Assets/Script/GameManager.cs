@@ -26,12 +26,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GridSpawn gridSpawn;
     private int randomIndex;
     private MatchChecker checker;
-
+    public int score;
+    private bool isGameOver;
 
 
     void Awake()
     {
         InitializeFruits();
+        score = 0;
+        isGameOver = false;
     }
     void Start()
     {
@@ -66,6 +69,26 @@ public class GameManager : MonoBehaviour
                 inactiveFruits.Add(fruit); 
             }
         }
+
+ 
+        if (activeFruits.Count >= 64 && !isGameOver)
+        {
+            StartCoroutine(CheckGameOverCondition());
+        }
+    
+
+
+    }
+
+    private IEnumerator CheckGameOverCondition()
+    {
+        yield return new WaitForSeconds(1);
+
+        if (activeFruits.Count >= 63)
+        {
+            isGameOver = true;
+            UIManager.Instance.OpenUI<GameOverCanvas>();
+        }
     }
 
     private void InitializeFruits()
@@ -84,17 +107,13 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public void CheckCell()
-    {   
-        checker.CheckMatchAfterPlacement();
-    }    
+
 
     // Active ở vị trí cố định
     public GameObject ActivateRandomFruitAtFixedPosition()
     {
-        if (inactiveFruits.Count == 0 || activeFruits.Count >= 63)
+        if (inactiveFruits.Count == 0 || activeFruits.Count >= 64)
         {
-            Debug.LogWarning("No inactive fruits available!");
             return null;
         }
 
@@ -118,13 +137,11 @@ public class GameManager : MonoBehaviour
     {
         if (inactiveFruits.Count == 0 || activeFruits.Count >= 63)
         {
-            Debug.LogWarning("No inactive fruits available!");
             return ;
         }
 
         // Get random fruit from inactive list
         int rdIndex =  Random.Range(0,inactiveFruits.Count);
-        //Debug.Log("" + rdIndex + " " + randomIndex);
         GameObject selectedFruit = inactiveFruits[rdIndex];
         selectedFruit.GetComponent<Fruit>().Actived = false;
         // Calculate random position
@@ -139,25 +156,7 @@ public class GameManager : MonoBehaviour
         inactiveFruits.RemoveAt(rdIndex);
         
         activeFruits.Add(selectedFruit);
-        CheckCell();
+        
     }
-
-    // Deactivate a fruit
-    public void DeactivateFruit(GameObject fruit)
-    {
-        if (activeFruits.Contains(fruit))
-        {
-            fruit.SetActive(false);
-            activeFruits.Remove(fruit);
-            inactiveFruits.Add(fruit);
-        }
-    }
-
-    // Helper method to get counts
-    public void GetPoolStatus()
-    {
-        Debug.Log($"Total fruits: {allFruits.Count}");
-        Debug.Log($"Active fruits: {activeFruits.Count}");
-        Debug.Log($"Inactive fruits: {inactiveFruits.Count}");
-    }
+   
 }

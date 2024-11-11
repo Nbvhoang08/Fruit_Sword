@@ -10,12 +10,14 @@ public class HomeCanvas : UICanvas
     {
         UIManager.Instance.CloseAll();
         UIManager.Instance.OpenUI<LoadingCanvas>();
+        SoundManager.Instance.PlayVFXSound(2);
 
     }
     public void RankButton()
     {
         UIManager.Instance.CloseUIDirectly<HomeCanvas>();
         UIManager.Instance.OpenUI<LeaderBoardCanvas>();
+        SoundManager.Instance.PlayVFXSound(2);
     }
 
     

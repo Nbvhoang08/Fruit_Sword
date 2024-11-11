@@ -11,13 +11,13 @@ public class Cell : MonoBehaviour
 
     private Vector2 cellPosition;
     public Cell cell;
-    private float timeInsideCell = 0f;
+    [SerializeField]private float timeInsideCell = 0f;
     [SerializeField] private bool isObjectInside = false;
     private const float MINIMUM_TIME = 0.5f;
 
     [SerializeField]private GameObject currentFruit;
-    private float stayDuration = 0.1f; // Thời gian tối thiểu fruit phải ở trong ô
-    private float stayTimer;
+    [SerializeField] private float stayDuration = 0.1f; // Thời gian tối thiểu fruit phải ở trong ô
+    [SerializeField] private float stayTimer;
 
     private void Start()
     {
@@ -71,6 +71,7 @@ public class Cell : MonoBehaviour
         {
             // Reset timer khi có fruit mới vào
             stayTimer = 0;
+            timeInsideCell = 0;
             if(currentFruit == null)
             {
                 currentFruit = other.gameObject;
@@ -86,16 +87,20 @@ public class Cell : MonoBehaviour
         {
             isObjectInside = false;
             currentFruit = null;
-            stayTimer = 0;
-           
             return;
         }
+
 
         // Nếu có fruit và là fruit đang theo dõi
         if (other != null && other.CompareTag("fruit") && other.gameObject == currentFruit)
         {
-            if (other.gameObject.activeInHierarchy)
+            if(currentFruit == null)
             {
+                currentFruit = other.gameObject;
+            }
+            if (other.gameObject.activeInHierarchy)
+            {   
+                
                 stayTimer += Time.deltaTime;
                 if (stayTimer >= stayDuration)
                 {
@@ -108,7 +113,7 @@ public class Cell : MonoBehaviour
     {
         if (currentFruit != null)
         {
-            currentFruit.SetActive(false);
+            currentFruit.GetComponent<Fruit>().IsDespawn = true;
         }
     }
 
@@ -119,6 +124,7 @@ public class Cell : MonoBehaviour
             isObjectInside = false;
             currentFruit = null;
             stayTimer = 0;
+            timeInsideCell = 0;
         }
     }
 }

@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-public class GamPlayCanvas : UICanvas
+public class GameOverCanvas : UICanvas
 {
-    // Start is called before the first frame update
-    public Sprite OnVolume;
-    public Sprite OffVolume;
-
-    [SerializeField] private Image buttonImage;
-    public Text ScoreText;
+    // Start is called before the first frame update    public Text ScoreText;
     public GameManager gameManager;
+    public Text ScoreText;
+    public Canvas canvas;
 
     void OnEnable()
     {
@@ -19,6 +16,12 @@ public class GamPlayCanvas : UICanvas
         {
             gameManager = FindObjectOfType<GameManager>();
         }
+         if (canvas == null)
+        {
+            canvas = GetComponentInParent<Canvas>();
+        } 
+        UIManager.Instance.CloseUIDirectly<GamPlayCanvas>();
+        canvas.sortingOrder = 1000;
     }
     void Update()
     {
@@ -30,34 +33,28 @@ public class GamPlayCanvas : UICanvas
             ScoreText.text = gameManager.score.ToString();
         }
     }
-
-    // Update is called once per frame
-    public void RetryButton()
-    {
-        StartCoroutine(ReLoad());
-        SoundManager.Instance.PlayVFXSound(2);
-    }
-    
-    public void HomeButton()
+     public void HomeButton()
     {
         
         UIManager.Instance.CloseAll();
         UIManager.Instance.OpenUI<LoadingCanvas>();
         SoundManager.Instance.PlayVFXSound(2);
-        
-    }
-    
-    public void SoundButton()
-    {
-        SoundManager.Instance.TurnOn = !SoundManager.Instance.TurnOn;
-        UpdateButtonImage();
-        SoundManager.Instance.PlayVFXSound(2);
     }
 
+    public void RetryBtn()
+    {
+        StartCoroutine(ReLoad());
+        SoundManager.Instance.PlayVFXSound(2);
+        
+    }
     IEnumerator ReLoad()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         ReloadCurrentScene();
+        UIManager.Instance.OpenUI<GamPlayCanvas>();
+        yield return new WaitForSeconds(0.2f);
+        UIManager.Instance.CloseUIDirectly<GameOverCanvas>();
+        canvas.sortingOrder = -100;
     }
     
     public void ReloadCurrentScene()
@@ -66,17 +63,14 @@ public class GamPlayCanvas : UICanvas
         string currentSceneName = SceneManager.GetActiveScene().name;
         //Tải lại scene hiện tại
         SceneManager.LoadScene(currentSceneName);
+      
     }
-    private void UpdateButtonImage()
+
+    public void RecordBtn()
     {
-        if (SoundManager.Instance.TurnOn)
-        {
-            buttonImage.sprite = OnVolume;
-        }
-        else
-        {
-            buttonImage.sprite = OffVolume;
-        }
+        //UIManager.Instance.CloseUI<GameOverCanvas>(0.2f);
+        UIManager.Instance.OpenUI<SavePointCanvas>();
+        SoundManager.Instance.PlayVFXSound(2);
     }
 
 

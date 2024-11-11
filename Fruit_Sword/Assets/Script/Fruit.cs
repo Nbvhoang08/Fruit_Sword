@@ -13,6 +13,8 @@ public class Fruit : MonoBehaviour
     public FruitType type ;
     [SerializeField] private float speed ;
     [SerializeField] public GameManager gameManager;
+    
+    public bool IsDespawn = false;
     void Awake()
     {
         if (gameManager == null)
@@ -24,24 +26,32 @@ public class Fruit : MonoBehaviour
     {
         canMove = false;
     }
-    void OnEnable()
-    {
-        
-    }
     void OnDisable()
     {
         Actived = false;
     }
-
+    
     // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && Actived && !canMove)
         {
             Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D hitCollider = Physics2D.OverlapPoint(clickPosition);
+            clickPosition.z = 0; // Đảm bảo tọa độ z là 0 để tránh lỗi với 2D
 
-            if (hitCollider == null || !hitCollider.CompareTag("fruit"))
+            // Kiểm tra xem có bất kỳ đối tượng nào trong bán kính 1 đơn vị tại vị trí bấm
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(clickPosition, 0.5f);
+            bool hasFruit = false;
+
+            foreach (Collider2D collider in hitColliders)
+            {
+                if (collider.CompareTag("fruit"))
+                {
+                    hasFruit = true;
+                    break;
+                }
+            }
+            if (!hasFruit)
             {
                 Vector3 potentialTargetPos = clickPosition;
                 potentialTargetPos.x = Mathf.Round(potentialTargetPos.x / 2) * 2;
@@ -69,6 +79,7 @@ public class Fruit : MonoBehaviour
             Actived = false ;
             canMove = false ;
             gameManager.ActivateRandomFruitAtFixedPosition();
+            //gameManager.ActivateRandomFruitAtRandomPosition();
             StartCoroutine(RadomFruit());
             
             
@@ -84,11 +95,26 @@ public class Fruit : MonoBehaviour
     }
 
     IEnumerator RadomFruit(){
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         gameManager.ActivateRandomFruitAtRandomPosition();
-        //gameManager.CheckCell();
+        
         
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Sword"))
+        {
+            if(IsDespawn)
+            {
+                IsDespawn = false ;
+                gameObject.SetActive(false);
+                //SoundManager.Instance.PlayVFXSound(1);
+            }
+            other.GetComponent<SwordE>().TakeScore(score);
+            
+        }
+    }
+
 
 
 
