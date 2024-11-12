@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
         GameObject selectedFruit = inactiveFruits[rdIndex];
         selectedFruit.GetComponent<Fruit>().Actived = false;
         // Calculate random position
-        int randomIndexPositon = Random.Range(0,gridSpawn.emptyCells.Count);
+        int randomIndexPositon = Random.Range(0,gridSpawn.emptyCells.Count-1);
         Vector2 randomPosition = gridSpawn.emptyCells[randomIndexPositon].gameObject.transform.position;
 
         // Set position and activate

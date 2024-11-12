@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa52e455e13634815a2368573e6b6faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 30
+  score: 15
   canMove: 0
   targetPos: {x: 0, y: 0}
   Actived: 0
