@@ -6,7 +6,7 @@ public class Cell : MonoBehaviour
 {
     public bool fruitInside;
     public FruitType fruitType = FruitType.none ;
-    public delegate void FruitStatusChanged(Cell cell, bool isEmpty);
+    public delegate void FruitStatusChanged(Cell cell,bool isObjectInside);
     public event FruitStatusChanged OnFruitStatusChanged;
 
     private Vector2 cellPosition;
@@ -28,25 +28,26 @@ public class Cell : MonoBehaviour
 
     private void Update()
     {
+
+        timeInsideCell = Mathf.Clamp(timeInsideCell, 0f, 1f);
         if (isObjectInside)
         {
             if(currentFruit != null)
             {
                 fruitType = currentFruit.GetComponent<Fruit>().type;
             }
-            
             timeInsideCell += Time.deltaTime;
             if (timeInsideCell >= MINIMUM_TIME && !fruitInside)
             {
-                SetFruitInside(true);
+                fruitInside = true;
             }
         }
         else
         {
             fruitType = FruitType.none;
-            SetFruitInside(false);
+            fruitInside = false;
         }
-
+        SetFruitInside();
         // Kiểm tra nếu fruit hiện tại không còn active
         if (currentFruit != null && !currentFruit.activeInHierarchy)
         {
@@ -56,13 +57,14 @@ public class Cell : MonoBehaviour
         }
     }
 
-    public void SetFruitInside(bool value)
+    public void SetFruitInside()
     {
-        if (fruitInside != value)
-        {
-            fruitInside = value;
-            OnFruitStatusChanged?.Invoke(cell, !fruitInside);
-        }
+        // if (fruitInside != value)
+        // {
+        //     fruitInside = value;
+            
+        // }
+        OnFruitStatusChanged?.Invoke(cell, isObjectInside);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -26,9 +26,10 @@ public class Fruit : MonoBehaviour
     {
         canMove = false;
     }
+  
     void OnDisable()
     {
-        Actived = false;
+        //Actived = false;
     }
     
     // Update is called once per frame
@@ -37,19 +38,50 @@ public class Fruit : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && Actived && !canMove)
         {
             Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            clickPosition.z = 0; // Đảm bảo tọa độ z là 0 để tránh lỗi với 2D
+            clickPosition.z = 0;
 
-            // Kiểm tra xem có bất kỳ đối tượng nào trong bán kính 1 đơn vị tại vị trí bấm
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(clickPosition, 0.5f);
-            bool hasFruit = false;
+            // Khoảng cách cho các hướng thẳng (trên, dưới, trái, phải  )
+            float straightDistance = 0.6f;
+            // Khoảng cách cho các hướng chéo (theo định lý Pytago)
+            float diagonalDistance = 1f;
 
-            foreach (Collider2D collider in hitColliders)
+            // Định nghĩa 8 hướng
+            Vector2[] directions = new Vector2[]
             {
-                if (collider.CompareTag("fruit"))
+                Vector2.up,            // Trên
+                Vector2.down,          // Dưới
+                Vector2.left,          // Trái
+                Vector2.right,         // Phải
+                new Vector2(1, 1).normalized,    // Phải trên
+                new Vector2(1, -1).normalized,   // Phải dưới
+                new Vector2(-1, 1).normalized,   // Trái trên
+                new Vector2(-1, -1).normalized   // Trái dưới
+            };
+
+            bool hasFruit = false;
+            RaycastHit2D[] hits;
+
+            for (int i = 0; i < directions.Length; i++)
+            {
+                // Xác định khoảng cách dựa vào hướng (thẳng hay chéo)
+                float distance = i < 4 ? straightDistance : diagonalDistance;
+    
+                // Thực hiện raycast theo hướng
+                hits = Physics2D.RaycastAll(clickPosition, directions[i], distance);
+    
+                // Debug để vẽ các tia raycast
+                Debug.DrawRay(clickPosition, directions[i] * distance, Color.red, 1f);
+    
+                foreach (RaycastHit2D hit in hits)
                 {
-                    hasFruit = true;
-                    break;
+                    if (hit.collider != null && hit.collider.CompareTag("fruit"))
+                    {
+                        hasFruit = true;
+                        break;
+                    }
                 }
+    
+                if (hasFruit) break;
             }
             if (!hasFruit)
             {
@@ -79,8 +111,8 @@ public class Fruit : MonoBehaviour
             Actived = false ;
             canMove = false ;
             gameManager.ActivateRandomFruitAtFixedPosition();
-            //gameManager.ActivateRandomFruitAtRandomPosition();
-            StartCoroutine(RadomFruit());
+            gameManager.ActivateRandomFruitAtRandomPosition();
+            //StartCoroutine(RadomFruit());
             
             
         }else
@@ -108,13 +140,11 @@ public class Fruit : MonoBehaviour
             {
                 IsDespawn = false ;
                 gameObject.SetActive(false);
-                //SoundManager.Instance.PlayVFXSound(1);
             }
             other.GetComponent<SwordE>().TakeScore(score);
             
         }
     }
-
 
 
 

@@ -29,6 +29,11 @@ public class GamPlayCanvas : UICanvas
         {
             ScoreText.text = gameManager.score.ToString();
         }
+        UpdateButtonImage();
+
+
+
+
     }
 
     // Update is called once per frame

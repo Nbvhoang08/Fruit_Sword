@@ -98,16 +98,16 @@ public class GridSpawn : MonoBehaviour
     }
 
       // Method to update emptyCells list
-    private void UpdateEmptyCells(Cell cell,bool isEmpty)
+    private void UpdateEmptyCells(Cell cell,bool isObjectInside)
     {
         
-        if (isEmpty && !emptyCells.Contains(cell))
+        if (!emptyCells.Contains(cell) && !isObjectInside)
         {
             emptyCells.Add(cell);
            
 
         }
-        else if (!isEmpty && emptyCells.Contains(cell))
+        else if (isObjectInside && emptyCells.Contains(cell))
         {
             emptyCells.Remove(cell);
         }

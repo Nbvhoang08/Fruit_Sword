@@ -189,6 +189,7 @@ public class MatchChecker : MonoBehaviour
             
                 // Tạo hiệu ứng
                 CreateSwordEffect(match);
+                //StartCoroutine(Sword(match));
             
                 // Xóa match khỏi danh sách
                 matches.RemoveAt(i);
@@ -198,7 +199,12 @@ public class MatchChecker : MonoBehaviour
         return false;
     }
 
+    IEnumerator Sword(MatchInfo match)
+    {
+        yield return new WaitForSeconds(0.3f);
+        CreateSwordEffect(match);
 
+    }
 
 
 
